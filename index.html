@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outfit Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Bebas+Neue&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ==================== LOADING ==================== -->
+<div id="loadScreen" class="load-screen">
+    <div class="load-center">
+        <div class="load-star">✦</div>
+        <div class="load-name">OUTFIT STUDIO</div>
+        <div class="load-bar"><div class="load-prog" id="loadProg"></div></div>
+        <div class="load-hint">Initialisierung…</div>
+    </div>
+</div>
+
+<!-- ==================== APP ==================== -->
+<div class="app hidden" id="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+
+        <div class="brand">
+            <span class="brand-star">✦</span>
+            <div class="brand-type">
+                <div class="brand-top">OUTFIT</div>
+                <div class="brand-bot">STUDIO</div>
+            </div>
+            <button class="sq-btn" id="themeToggle" title="Light/Dark"><svg class="icon-moon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg><svg class="icon-sun" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg></button><button class="sq-btn" id="sidebarClose" title="Sidebar schließen">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M8.5 2L3.5 6l5 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Upload -->
+        <div class="s-section">
+            <label for="upload" class="upload-zone">
+                <div class="uz-icon">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M10 3.5v13M3.5 10h13" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="uz-text">
+                    <b>Kleidung hinzufügen</b>
+                    <small>JPG · PNG · WEBP</small>
+                </div>
+            </label>
+            <input type="file" id="upload" accept="image/*" multiple hidden>
+        </div>
+
+        <!-- Outfits -->
+        <div class="s-section">
+            <div class="s-header">
+                <span class="s-label">OUTFITS</span>
+                <button class="pill-btn" id="newSlotBtn">+ Neu</button>
+            </div>
+            <!-- Outfit-Suche -->
+            <div class="search-row" style="margin-top:6px">
+                <div class="search-field">
+                    <svg class="si" width="12" height="12" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M17 17l4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    <input id="outfitSearch" type="text" placeholder="Outfit suchen…" class="s-inp">
+                    <button class="s-clear hidden" id="outfitSearchClear">✕</button>
+                </div>
+            </div>
+            <div class="slot-list" id="slotList"></div>
+        </div>
+
+        <!-- Tools -->
+        <div class="s-section">
+            <div class="s-header"><span class="s-label">TOOLS</span></div>
+            <div class="tools-grid">
+                <button class="tool-tile" id="autoOutfitBtn"><span class="tt-icon">🎲</span><span class="tt-label">Auto Outfit</span></button>
+                <button class="tool-tile" id="colorAnalysisBtn"><span class="tt-icon">🎨</span><span class="tt-label">Farben</span></button>
+                <button class="tool-tile" id="describeBtn"><span class="tt-icon">🧾</span><span class="tt-label">Beschreibung</span></button>
+            </div>
+        </div>
+
+        <!-- Garderobe -->
+        <div class="s-section s-wardrobe">
+            <div class="s-header">
+                <span class="s-label">GARDEROBE</span>
+                <span class="mono-num" id="wardCount">0 Teile</span>
+            </div>
+
+            <div class="search-row">
+                <div class="search-field">
+                    <svg class="si" width="12" height="12" viewBox="0 0 24 24" fill="none">
+                        <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
+                        <path d="M17 17l4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <input id="wardSearch" type="text" placeholder="Suchen…" class="s-inp">
+                    <button class="s-clear hidden" id="searchClear">✕</button>
+                </div>
+            </div>
+
+            <div class="f-tabs" id="fTabs">
+                <button class="f-tab active" data-cat="all">Alle</button>
+                <button class="f-tab" data-cat="cat-head">🧢</button>
+                <button class="f-tab" data-cat="cat-top">👕</button>
+                <button class="f-tab" data-cat="cat-bottom">👖</button>
+                <button class="f-tab" data-cat="cat-shoes">👟</button>
+            </div>
+
+            <div class="ward-scroll" id="wardScroll">
+
+                <div class="c-block" data-cat="cat-head">
+                    <div class="c-head">
+                        <span class="c-label">🧢 Kopfbedeckungen</span>
+                        <span class="mono-num" id="cnt-cat-head">0</span>
+                    </div>
+                    <div class="i-grid" id="cat-head"></div>
+                </div>
+
+                <div class="c-block" data-cat="cat-top">
+                    <div class="c-head">
+                        <span class="c-label">👕 Oberteile</span>
+                        <span class="mono-num" id="cnt-cat-top">0</span>
+                    </div>
+                    <div class="i-grid" id="cat-top"></div>
+                </div>
+
+                <div class="c-block" data-cat="cat-bottom">
+                    <div class="c-head">
+                        <span class="c-label">👖 Hosen / Röcke</span>
+                        <span class="mono-num" id="cnt-cat-bottom">0</span>
+                    </div>
+                    <div class="i-grid" id="cat-bottom"></div>
+                </div>
+
+                <div class="c-block" data-cat="cat-shoes">
+                    <div class="c-head">
+                        <span class="c-label">👟 Schuhe</span>
+                        <span class="mono-num" id="cnt-cat-shoes">0</span>
+                    </div>
+                    <div class="i-grid" id="cat-shoes"></div>
+                </div>
+
+                <div class="w-empty hidden" id="wardEmpty">Nichts gefunden</div>
+            </div>
+        </div>
+
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <!-- Topbar -->
+        <header class="topbar">
+
+            <div class="tb-left">
+                <button class="sq-btn hidden" id="sidebarOpen">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <path d="M1 2.5h12M1 7h12M1 11.5h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                    </svg>
+                </button>
+                <div class="cur-outfit">
+                    <div class="co-tag">AKTUELLES OUTFIT</div>
+                    <h1 class="co-name" id="outfitName">—</h1>
+                </div>
+            </div>
+
+            <div class="tb-mid">
+                <div class="mode-seg">
+                    <button class="ms-btn active" id="modeEdit">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                            <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Bearbeiten
+                    </button>
+                    <button class="ms-btn" id="modePreview">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                            <ellipse cx="12" cy="12" rx="10" ry="6" stroke="currentColor" stroke-width="1.8"/>
+                            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/>
+                        </svg>
+                        Vorschau
+                    </button>
+                </div>
+            </div>
+
+            <div class="tb-right">
+
+                <!-- Silhouette opacity -->
+                <div class="slider-wrap" title="Silhouette-Deckkraft">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" opacity=".4">
+                        <path d="M12 2a10 10 0 1 0 0 20V2z"/>
+                        <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                    </svg>
+                    <input type="range" id="silOpacity" min="0" max="25" value="9" class="tslider">
+                </div>
+
+                <!-- BG color -->
+                <div class="bg-color-btn" title="Hintergrundfarbe">
+                    <div class="bg-swatch" id="bgSwatch"></div>
+                    <input type="color" id="bgPicker" value="#0a0a0a">
+                </div>
+
+                <div class="divider"></div>
+
+                <button class="icon-btn" id="undoBtn" title="Rückgängig  Ctrl+Z">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                        <path d="M3 9h13a5 5 0 0 1 0 10H3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M7 5L3 9l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <button class="icon-btn" id="redoBtn" title="Wiederholen  Ctrl+Y">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                        <path d="M21 9H8a5 5 0 0 0 0 10h13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M17 5l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+
+                <div class="divider"></div>
+
+                <button class="icon-btn" id="gridBtn" title="Raster  G">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                        <path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <button class="icon-btn" id="guidesBtn" title="Mittellinien  R">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 3v18M3 12h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 2"/>
+                    </svg>
+                </button>
+                <button class="icon-btn" id="snapBtn" title="Einrasten an Mitte  S">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/>
+                        <path d="M12 3v4M12 17v4M3 12h4M17 12h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </button>
+
+                <div class="divider"></div>
+
+                <button class="icon-btn icon-btn--del" id="clearBtn" title="Canvas leeren">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                        <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+
+                <button class="export-btn" id="exportBtn">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                        <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M7 11l5 5 5-5M12 4v12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span id="exportLabel">Exportieren</span>
+                </button>
+
+            </div>
+        </header>
+
+        <!-- Canvas + Inspector -->
+        <div class="workspace">
+
+            <div class="canvas-col">
+                <!-- The canvas -->
+                <div class="canvas" id="outfit-area">
+                    <img src="silhouette.png" class="silhouette" id="silhouette" alt="">
+                    <div class="grid-layer hidden" id="gridLayer"></div>
+                    <div class="guides-layer hidden" id="guidesLayer">
+                        <div class="gh"></div>
+                        <div class="gv"></div>
+                    </div>
+                    <!-- Snap lines -->
+                    <div class="snap-h hidden" id="snapH"></div>
+                    <div class="snap-v hidden" id="snapV"></div>
+
+                    <div class="empty-state" id="emptyState">
+                        <div class="es-star">✦</div>
+                        <p class="es-title">Dein Look wartet</p>
+                        <span class="es-sub">Wähle Teile aus der Garderobe</span>
+                    </div>
+                </div>
+
+                <!-- Status bar -->
+                <div class="status-bar">
+                    <div class="sb-l">
+                        <span class="sb-tag" id="itemTag">0 Teile</span>
+                        <span class="sb-dot">·</span>
+                        <span class="sb-tag" id="snapTag">Einrasten aus</span>
+                        <span class="sb-dot">·</span>
+                        <span class="sb-tag" id="posTag">Pos: —</span>
+                    </div>
+                    <div class="sb-r">
+                        <span class="sb-hint">Scroll = Größe · Rechtsklick = Menü · Del = Entfernen</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inspector panel -->
+            <aside class="insp-panel" id="inspPanel">
+                <div class="ip-head">
+                    <span class="ip-title">INSPECTOR</span>
+                    <div class="ip-led" id="ipLed"></div>
+                </div>
+
+                <div class="ip-empty" id="ipEmpty">
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" opacity=".12">
+                        <rect x="3" y="3" width="22" height="22" rx="4" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M9 14h10M14 9v10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    <p>Kein Element<br>ausgewählt</p>
+                </div>
+
+                <div class="ip-body hidden" id="ipBody">
+
+                    <!-- Thumbnail -->
+                    <div class="ip-thumb-row">
+                        <div class="ip-thumb-box">
+                            <img class="ip-thumb" id="ipThumb" src="" alt="">
+                        </div>
+                        <div class="ip-thumb-info">
+                            <span class="ip-item-name" id="ipItemName">Teil</span>
+                            <span class="ip-item-cat" id="ipItemCat">—</span>
+                        </div>
+                    </div>
+
+                    <div class="ip-divider"></div>
+
+                    <!-- Sliders -->
+                    <div class="ip-sliders">
+
+                        <div class="ip-ctrl">
+                            <div class="ip-ctrl-head">
+                                <span class="ip-label">Größe</span>
+                                <span class="ip-val" id="scaleVal">100%</span>
+                            </div>
+                            <input type="range" class="ip-range" id="scaleSlider" min="15" max="400" value="100">
+                        </div>
+
+                        <div class="ip-ctrl">
+                            <div class="ip-ctrl-head">
+                                <span class="ip-label">Rotation</span>
+                                <span class="ip-val" id="rotateVal">0°</span>
+                            </div>
+                            <input type="range" class="ip-range" id="rotateSlider" min="-180" max="180" value="0">
+                        </div>
+
+                        <div class="ip-ctrl">
+                            <div class="ip-ctrl-head">
+                                <span class="ip-label">Deckkraft</span>
+                                <span class="ip-val" id="opacityVal">100%</span>
+                            </div>
+                            <input type="range" class="ip-range" id="opacitySlider" min="5" max="100" value="100">
+                        </div>
+
+                    </div>
+
+                    <div class="ip-divider"></div>
+
+                    <!-- Filter -->
+                    <span class="ip-label" style="display:block;margin-bottom:8px">Bildfilter</span>
+                    <div class="ip-filters" id="filterBtns">
+                        <button class="ip-f active" data-f="none">Normal</button>
+                        <button class="ip-f" data-f="grayscale(1)">S/W</button>
+                        <button class="ip-f" data-f="sepia(0.8)">Sepia</button>
+                        <button class="ip-f" data-f="contrast(1.4) saturate(1.4)">Vivid</button>
+                        <button class="ip-f" data-f="brightness(1.35) contrast(0.88)">Soft</button>
+                        <button class="ip-f" data-f="hue-rotate(180deg) saturate(1.2)">Invert</button>
+                    </div>
+
+                    <div class="ip-divider"></div>
+
+                    <!-- Actions -->
+                    <div class="ip-acts">
+                        <button class="ip-act" id="aFlipH">↔ Spiegeln</button>
+                        <button class="ip-act" id="aFlipV">↕ Kippen</button>
+                        <button class="ip-act" id="aDupe">⊕ Kopieren</button>
+                        <button class="ip-act" id="aFront">↑ Vorne</button>
+                        <button class="ip-act" id="aBack">↓ Hinten</button>
+                        <button class="ip-act ip-act--del" id="aDelete">✕ Entfernen</button>
+                    </div>
+
+                    <div class="ip-divider"></div>
+
+                    <!-- Label -->
+                    <span class="ip-label" style="display:block;margin-bottom:6px">Beschriftung</span>
+                    <input type="text" class="ip-label-input" id="labelInput" placeholder="z.B. Nike Air Max…" maxlength="40">
+
+                    <div class="ip-divider"></div>
+
+                    <!-- Position readout -->
+                    <div class="ip-pos">
+                        <div class="ip-pos-item"><span class="ip-label">X</span><span class="ip-num" id="posX">—</span></div>
+                        <div class="ip-pos-item"><span class="ip-label">Y</span><span class="ip-num" id="posY">—</span></div>
+                        <div class="ip-pos-item"><span class="ip-label">B</span><span class="ip-num" id="posW">—</span></div>
+                        <div class="ip-pos-item"><span class="ip-label">H</span><span class="ip-num" id="posH">—</span></div>
+                    </div>
+
+                </div>
+            </aside>
+
+        </div>
+    </main>
+
+</div>
+
+<!-- ==================== MODALS ==================== -->
+
+<!-- Category picker -->
+<div class="modal hidden" id="catModal">
+    <div class="modal-bg" id="catBg"></div>
+    <div class="modal-box">
+        <div class="modal-hd">
+            <h2 class="modal-h2">Kategorie wählen</h2>
+            <button class="modal-close-btn" id="catClose">✕</button>
+        </div>
+        <div class="modal-img-preview" id="catImgPreview"></div>
+        <div class="cg-grid">
+            <button class="cg-btn" data-cat="cat-head"><span class="cg-em">🧢</span>Kopfbedeckung</button>
+            <button class="cg-btn" data-cat="cat-top"><span class="cg-em">👕</span>Oberteil</button>
+            <button class="cg-btn" data-cat="cat-bottom"><span class="cg-em">👖</span>Hose / Rock</button>
+            <button class="cg-btn" data-cat="cat-shoes"><span class="cg-em">👟</span>Schuhe</button>
+        </div>
+    </div>
+</div>
+
+<!-- Rename -->
+<div class="modal hidden" id="renameModal">
+    <div class="modal-bg" id="renameBg"></div>
+    <div class="modal-box" style="max-width:310px">
+        <div class="modal-hd">
+            <h2 class="modal-h2">Outfit benennen</h2>
+            <button class="modal-close-btn" id="renameClose">✕</button>
+        </div>
+        <input class="modal-inp" id="renameInput" type="text" placeholder="z.B. Casual Friday…" maxlength="32">
+        <button class="modal-save" id="renameConfirm">Speichern</button>
+    </div>
+</div>
+
+<!-- Context menu -->
+<div class="ctx-menu hidden" id="ctxMenu">
+    <button class="ctx-row" id="ctxFront"><span>↑</span>Nach vorne</button>
+    <button class="ctx-row" id="ctxBack"><span>↓</span>Nach hinten</button>
+    <div class="ctx-line"></div>
+    <button class="ctx-row" id="ctxFlipH"><span>↔</span>Spiegeln</button>
+    <button class="ctx-row" id="ctxFlipV"><span>↕</span>Kippen</button>
+    <button class="ctx-row" id="ctxDupe"><span>⊕</span>Duplizieren</button>
+    <div class="ctx-line"></div>
+    <button class="ctx-row ctx-row--del" id="ctxDelete"><span>✕</span>Entfernen</button>
+</div>
+
+<!-- Color Modal -->
+<div class="modal hidden" id="colorModal">
+    <div class="modal-bg" id="colorBg"></div>
+    <div class="modal-box" style="max-width:360px">
+        <div class="modal-hd">
+            <h2 class="modal-h2">Farbanalyse</h2>
+            <button class="modal-close-btn" id="colorClose">✕</button>
+        </div>
+        <div id="colorResults" class="color-results"></div>
+    </div>
+</div>
+<!-- Desc Modal -->
+<div class="modal hidden" id="descModal">
+    <div class="modal-bg" id="descBg"></div>
+    <div class="modal-box" style="max-width:380px">
+        <div class="modal-hd">
+            <h2 class="modal-h2">Outfit-Beschreibung</h2>
+            <button class="modal-close-btn" id="descClose">✕</button>
+        </div>
+        <div id="descResults" class="desc-results"></div>
+    </div>
+</div>
+<!-- Toast -->
+<div class="toast hidden" id="toast"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
